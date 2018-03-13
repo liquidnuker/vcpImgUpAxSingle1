@@ -1,17 +1,28 @@
 <template>
 <div id="vee-form">
   <!-- name target v-validate -->
-  <form id="form" name="form" enctype="multipart/form-data" @submit.prevent="validateBeforeSubmit">
+  <form id="form" name="form" enctype="multipart/form-data" @submit="validate()">
     <div>
+      <!-- file -->
+      <label for="f_file">Choose file to upload</label>
       <input type="file" name="f_file"
       v-validate="'required|image'"
-      v-on:change="handleFileUpload($event)"/>
+      v-on:change="handleFileUpload($event)" 
+      accept=".jpg, .gif, .png, .jpeg" />
+      <br />
       <small v-show="errors.has('f_file')" role="alert">{{ errors.first('f_file') }}</small>
+      <!-- /file -->
+
+      <!-- email -->
       <label for="email">Email</label>
+      <br />
       <small v-show="errors.has('email')" role="alert">{{ errors.first('email') }}</small>
       <input id="email" v-validate="'required|email'" type="text" name="email">
+      <!-- /email -->
+
+      <br />
       <button type="submit">Submit</button>
-      <!-- <button v-on:click="submitFile()">Submit</button> -->
+      <!-- <button v-on:click="validate()">submit</button> -->
     </div>
   </form>  
 </div>
@@ -51,8 +62,19 @@ export default {
           console.log("error");
         });
       },
-      validateBeforeSubmit: function () {
-        console.dir(validator);
+      validate: function (event) {
+        
+        this.$validator.validateAll().then(() => {
+          // console.log("valid");
+          this.submitFile();
+        }).catch(() => {
+          console.log("invalid");
+          return false;   
+        });
+
+        event.preventDefault();
+
+        
       }
     }
 };  
