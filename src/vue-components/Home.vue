@@ -17,14 +17,15 @@
       <label for="email">Email</label>
       <br />
       <small v-show="errors.has('email')" role="alert">{{ errors.first('email') }}</small>
-      <input id="email" v-validate="'required|email'" type="text" name="email">
+      <input id="email" v-validate="'required|email'" type="text" name="email" v-model="email">
       <!-- /email -->
 
       <br />
       <button type="submit">Submit</button>
       <!-- <button v-on:click="validate()">submit</button> -->
     </div>
-  </form>  
+  </form> 
+  <br />
 </div>
 </template>
 
@@ -39,7 +40,9 @@ const validator = new Validator();
 export default {
   data() {
       return {
-        file: ""
+        file: "",
+        email: ""
+
       };
     },
     mounted: function () {},
@@ -51,7 +54,9 @@ export default {
       submitFile: function () {
         let formData = new FormData();
         formData.append("f_file", this.file);
+        formData.append("f_email", this.email);
 
+        let self = this;
         axios.post("./src/php/process.php", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
