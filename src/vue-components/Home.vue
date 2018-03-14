@@ -1,7 +1,7 @@
 <template>
 <div id="vee-form">
   <!-- name target v-validate -->
-  <form id="form" name="form" enctype="multipart/form-data" @submit="validate()">
+  <form id="form" name="form" @submit="validate()" method="POST">
     <div>
       <!-- file -->
       <label for="f_file">Choose file to upload</label>
@@ -68,18 +68,14 @@ export default {
         });
       },
       validate: function (event) {
-        
         this.$validator.validateAll().then(() => {
-          // console.log("valid");
+          // ok
           this.submitFile();
         }).catch(() => {
           console.log("invalid");
-          return false;   
+          // return false;   
         });
-
-        event.preventDefault();
-
-        
+        event.preventDefault();        
       }
     }
 };  
